@@ -1,11 +1,11 @@
 # DragonCostume 
 Repository for all code and designs used in my massive dragon head and costume
-Dragon Head 
-  -Internal LED strips
+/Dragon Head 
+  -/Lights Internal LED strips
     Running WLED on an esp32 to power the primary LED Light Strips within the head (Fork minimal changes) (Dev environment is Platform.io in VSCode)
     Several test FASTLED simulations of the head strips coded up in WoKwi - no production code
 
-  -Controllable Animated Eyes
+  -/Eyes Controllable Animated Eyes
     Animated Eyes powered by an Adafruit Monster M4sk with custom code (fork) (Dev environment is both Arduino and Platform.io)
     Animated eye gaze direction is controlled by face detection done on an ESP32-WROVER-DEV Test framework is based on the ESP32-cam "camera" demo(Dev environment is both Arduino and Platform.io, but issue with Platform.io causes mem management failure in face detection)
     Some example code created for sscanf and parameter passing coded in wowki
