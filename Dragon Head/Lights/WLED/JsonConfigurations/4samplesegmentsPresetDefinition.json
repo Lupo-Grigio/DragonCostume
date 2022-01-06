@@ -1,0 +1,237 @@
+"3": {
+    "n": "4SampleSegments",
+    "on": true,
+    "bri": 213,
+    "transition": 0,
+    "mainseg": 0,
+    "seg": [
+        {
+            "id": 0,
+            "start": 0,
+            "stop": 27,
+            "grp": 1,
+            "spc": 0,
+            "of": 0,
+            "on": true,
+            "bri": 255,
+            "cct": 127,
+            "n": "BigHornupperR",
+            "col": [
+                [
+                    227,
+                    255,
+                    244
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ]
+            ],
+            "fx": 38,
+            "sx": 165,
+            "ix": 95,
+            "pal": 55,
+            "sel": true,
+            "rev": false,
+            "mi": false
+        },
+        {
+            "id": 1,
+            "start": 28,
+            "stop": 55,
+            "grp": 1,
+            "spc": 0,
+            "of": 0,
+            "on": true,
+            "bri": 255,
+            "cct": 127,
+            "n": "BigHornupperL",
+            "col": [
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ]
+            ],
+            "fx": 38,
+            "sx": 165,
+            "ix": 95,
+            "pal": 55,
+            "sel": true,
+            "rev": false,
+            "mi": false
+        },
+        {
+            "id": 2,
+            "start": 56,
+            "stop": 68,
+            "grp": 1,
+            "spc": 0,
+            "of": 0,
+            "on": false,
+            "bri": 255,
+            "cct": 127,
+            "n": "SmallupperhornR",
+            "col": [
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ]
+            ],
+            "fx": 38,
+            "sx": 128,
+            "ix": 128,
+            "pal": 0,
+            "sel": true,
+            "rev": false,
+            "mi": false
+        },
+        {
+            "id": 3,
+            "start": 69,
+            "stop": 81,
+            "grp": 1,
+            "spc": 0,
+            "of": 0,
+            "on": false,
+            "bri": 255,
+            "cct": 127,
+            "n": "Small upper horn L",
+            "col": [
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ]
+            ],
+            "fx": 38,
+            "sx": 128,
+            "ix": 128,
+            "pal": 0,
+            "sel": true,
+            "rev": false,
+            "mi": false
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        },
+        {
+            "stop": 0
+        }
+    ]
+}
