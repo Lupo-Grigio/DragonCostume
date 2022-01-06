@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "author": "Lupo Grigio",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": -212.83, "left": -10.06, "attrs": {} }
+  ],
+  "connections": [ [ "esp:TX0", "$serialMonitor:RX", "", [] ], [ "esp:RX0", "$serialMonitor:TX", "", [] ] ]
+}

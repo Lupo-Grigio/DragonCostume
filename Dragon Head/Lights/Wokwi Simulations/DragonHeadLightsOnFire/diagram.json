@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "author": "Lupo Grigio",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-nano", "id": "uno", "top": -206.4, "left": 220.3, "attrs": {} },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Big Horn upper R",
+      "top": -494.58,
+      "left": 487.08,
+      "rotate": 20,
+      "matrixBrightness": "10",
+
+      "attrs": { "rows": "27", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Big Horn upper L",
+      "top": -495.6,
+      "left": -264.78,
+      "rotate": -20,
+      "attrs": { "rows": "27", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Small upper horn R",
+      "top": -126.44,
+      "left": 509.82,
+      "rotate": 40,
+      "attrs": { "rows": "12", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Small upper horn L",
+      "top": -142.15,
+      "left": -291.47,
+      "rotate": -40,
+      "attrs": { "rows": "12", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Center Rear Upper",
+      "top": -320.06,
+      "left": 107.83,
+      "attrs": { "rows": "18", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Nose lower R",
+      "top": 489.96,
+      "left": 203.41,
+      "attrs": { "rows": "33", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Nose lower L",
+      "top": 499.56,
+      "left": 59.41,
+      "attrs": { "rows": "33", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Nose Upper Center",
+      "top": 441.96,
+      "left": 126.61,
+      "attrs": { "rows": "33", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Lower Jaw R",
+      "top": 722.04,
+      "left": 261.01,
+      "attrs": { "rows": "27", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Lower Jaw L",
+      "top": 722.04,
+      "left": -17.39,
+      "attrs": { "rows": "27", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Lower large horn R",
+      "top": 124.99,
+      "left": 554.94,
+      "rotate": 20,
+      "attrs": { "rows": "18", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Lower large horn L",
+      "top": 152.22,
+      "left": -293.79,
+      "rotate": -20,
+      "attrs": { "rows": "18", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Lower Small horn R",
+      "top": 76.55,
+      "left": 499.5,
+      "rotate": 20,
+      "attrs": { "rows": "12", "cols": "1", "matrixLayout": "serpentine" }
+    },
+    {
+      "type": "wokwi-neopixel-canvas",
+      "id": "Lower Small horn L",
+      "top": 75.88,
+      "left": -251.13,
+      "rotate": -30,
+      "matrixBrightness": "10",
+      "attrs": { "rows": "12", "cols": "1", "matrixLayout": "serpentine" }
+    }
+  ],
+  "connections": [
+    [ "Big Horn upper R:DOUT", "Big Horn upper L:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Big Horn upper L:DOUT", "Small upper horn R:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Small upper horn R:DOUT", "Small upper horn L:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Small upper horn L:DOUT", "Center Rear Upper:DIN", "green", [ "v6", "*", "h-25" ] ],
+    [ "Center Rear Upper:DOUT", "Nose lower R:DIN", "green", [ "v6", "*", "h-25" ] ],
+    [ "Nose lower R:DOUT", "Nose lower L:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Nose lower L:DOUT", "Nose Upper Center:DIN", "green", [ "v16", "*", "h2"] ],
+    [ "Nose Upper Center:DOUT", "Lower Jaw R:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Lower Jaw R:DOUT", "Lower Jaw L:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Lower Jaw L:DOUT", "Lower large horn R:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Lower large horn R:DOUT", "Lower large horn L:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Lower large horn L:DOUT", "Lower Small horn R:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "Lower Small horn R:DOUT", "Lower Small horn L:DIN", "green", [ "v16", "*", "h2" ] ],
+    [ "uno:TX0", "$serialonitor:RX", "", [] ],
+    [ "uno:RX0", "$serialMonitor:TX", "", [] ],
+    [ "uno:3", "Big Horn upper R:DIN", "green", [ "v-16", "*", "h-9" ] ],
+    [ "uno:GND.2", "Big Horn upper R:VDD", "white", [ "v-20", "*", "h29" ] ],
+    [ "uno:5V.2", "Big Horn upper R:VDD", "red", [ "v20", "h-95", "*", "v0", "h-5" ] ]
+
+  ]
+}

@@ -22,8 +22,8 @@
 
 #include "camera_pins.h"
 
-const char* ssid = "NetSpoutMesh";
-const char* password = "theRoomsHaveNames";
+const char* ssid = "****";
+const char* password = "*****";
 
 // Freemove WROVER most of the GPIO are used by the camera...
 // GPIO 32 and 33 are not used by the camera

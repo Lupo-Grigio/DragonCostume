@@ -1,9 +1,14 @@
 # DragonCostume 
 Repository for all code and designs used in my massive dragon head and costume
 /Dragon Head 
-  -/Lights Internal LED strips
+  -/Lights 
+    Internal LED strips
     Running WLED on an esp32 to power the primary LED Light Strips within the head (Fork minimal changes) (Dev environment is Platform.io in VSCode)
-    Several test FASTLED simulations of the head strips coded up in WoKwi - no production code
+    The strip "Map" or definitions are created from a google sheets spreadsheet, The regions are created using several pivot tables
+
+    -/WoWki Simulations
+      Several test FASTLED simulations of the head strips coded up in WoKwi - no production code
+      makes a convient(Where is my spell checker?) way to simulate the LED strips.
 
   -/Eyes Controllable Animated Eyes
     Animated Eyes powered by an Adafruit Monster M4sk with custom code (fork) (Dev environment is both Arduino and Platform.io)
@@ -18,6 +23,12 @@ Repository for all code and designs used in my massive dragon head and costume
 
       -/Prototype Case
       3d printable case for the face tracking eye demo. Designed to hold the ESP32-CAM module and the Adafruit Monster M4sk. Originally designed in tinkercad by importing the case designed by adafruit for the M4sk. Tinkercad link:https://www.tinkercad.com/things/l33OCsHAKPb-eye-camera-mask-case also can be found on thingaverse: https://www.thingiverse.com/thing:5188566
+
+      -/M4SK PWM remapping example
+      Sample code for the Adafruit M4SK that just remaps the PWM port as Serial2 reads from it and writes to the USB serial monitor
+
+      -/ESP32-CAM second serial sample
+      A tiny project containing an example of setting up an ESP32-CAM to write data to pins 15 and 2, also a bit of beginner examples of passing pointers and structs. Developed and simulated on Wokwi. See the Wokwi-project.txt for link
   
   
   -Forward Cameras and Performer HUD
@@ -33,13 +44,17 @@ Repository for all code and designs used in my massive dragon head and costume
   -Smoke System
     Smoke effect controlled by arduino TBD
 
-  -Physical Sculpture and internal structure
+  -/Physical 
+    Sculpture and internal structure
     The Head itself is 3d modeled in blender
     The shell of the Mask is created thorugh pepacura designer https://tamasoft.co.jp/pepakura-en/
     The shell is cut both on a Silhouette Cameo 4 and a generic 60watt RUIDA powered Co2 laser
     Internal LED supports designed in Fusion 360 AND Tinkercad
     Animated Eye Mounts designed in Fusion 360 and Tinkercad
     All printed using PRUSASLICER
+
+    -/Blender Models
+      this is the start of the workflow, Just as it says, the blender source for the shell.
     
   -Cosmetic wrapping
     Reflective pattern created in Shilouette studio and cut on a Shilouette CAMEO 4
