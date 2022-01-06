@@ -10,9 +10,14 @@ Repository for all code and designs used in my massive dragon head and costume
     Animated eye gaze direction is controlled by face detection done on an ESP32-WROVER-DEV Test framework is based on the ESP32-cam "camera" demo(Dev environment is both Arduino and Platform.io, but issue with Platform.io causes mem management failure in face detection)
     Some example code created for sscanf and parameter passing coded in wowki
     Physical Joystic control of the eyes powered by an ADAFRUIT Joy Feather and Feather wing : In Progress
+
       -/M4_Eyes Based off of TonyLHansen's merge request into Adafruit's main. His code includes some extra eye controls and code for user.cpp files getting config info from the config file. Will be handy for me to set the BAUD rate between controller and the mask. https://github.com/adafruit/Adafruit_Learning_System_Guides/pull/915/commits/2b4827c8276a8fa8b2f16dbccf2c00a39fa4a631
     
-    -/ESP32_Camera_Controller_Demo Cloned from the ESP32-CAM/example and fixed via this commentary https://github.com/espressif/arduino-esp32/issues/5128. This directory contains the mirror code for M4_Eyes, this is the "controller" part. This does facial detection, and sends tracking data out serial port. This code is written for the Freenove ESP32-WROVER-DEV module with camera. https://www.amazon.com/Freenove-ESP32-WROVER-Bluetooth-Compatible-Tutorials/dp/B09BC5CNHM?ref_=ast_sto_dp This demo code runs a webserver and streams video, and contains VERBOSE debugging info written to the USB serial port. Face location data is written to serial 2 which is configured on pins 2 and 15, the format of the message and which pin is TX and RX are in the code. 
+      -/ESP32_Camera_Controller_Demo 
+      Cloned from the ESP32-CAM/example and fixed via this commentary https://github.com/espressif/arduino-esp32/issues/5128. This directory contains the mirror code for M4_Eyes, this is the "controller" part. This does facial detection, and sends tracking data out serial port. This code is written for the Freenove ESP32-WROVER-DEV module with camera. https://www.amazon.com/Freenove-ESP32-WROVER-Bluetooth-Compatible-Tutorials/dp/B09BC5CNHM?ref_=ast_sto_dp This demo code runs a webserver and streams video, and contains VERBOSE debugging info written to the USB serial port. Face location data is written to serial 2 which is configured on pins 2 and 15, the format of the message and which pin is TX and RX are in the code. 
+
+      -/Prototype Case
+      3d printable case for the face tracking eye demo. Designed to hold the ESP32-CAM module and the Adafruit Monster M4sk. Originally designed in tinkercad by importing the case designed by adafruit for the M4sk. Tinkercad link:https://www.tinkercad.com/things/l33OCsHAKPb-eye-camera-mask-case also can be found on thingaverse: https://www.thingiverse.com/thing:5188566
   
   
   -Forward Cameras and Performer HUD
