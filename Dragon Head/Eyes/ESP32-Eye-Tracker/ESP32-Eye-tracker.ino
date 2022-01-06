@@ -1,9 +1,10 @@
 #include "esp_camera.h"
-#include <WiFi.h>
 
+// ideally you should grab the BAUD definitions from the project that this one talks to
+// through something like #include "../common_comunication_settings.h" or #include "M4_Eyes/globals.h" 
+// buuuut you just have to make sure the serial settings (Baud rate 8n1 etc.) are set the same
 
-
-// NOTE: Testing Write to Hardware Serial 2
+// Detect Faces in field of view write the location to Hardware Serial 2
 //
 // WARNING!!! PSRAM IC required for UXGA resolution and high JPEG quality
 //            Ensure ESP32 Wrover Module or other board with PSRAM is selected
@@ -37,6 +38,10 @@
 #define RXPIN 15
 #define TXPIN 2
 
+#define DEBUG_BAUD 115200
+#define SERIAL2_BAUD 115200 // make sure this matches the rate at which your sender is transmitting
+
+
 
 void FaceFinderSetup();
 void FindFaces();
@@ -45,7 +50,7 @@ void GetFaceLocation( int *x, int *y, int *w, int *h);
 void requestFaceLocationEvent();
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(DEBUG_BAUD);
   Serial.setDebugOutput(true);
 
   Serial.print("\nFace Dector for ESP32");
@@ -111,17 +116,7 @@ void setup() {
   s->set_vflip(s, 1);
   s->set_hmirror(s, 1);
 #endif
-/*
-  WiFi.begin(ssid, password);
-  Serial.print("Connecting to WIFI network: ");
-  Serial.println(ssid);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(100);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("WiFi connected");
-  */
+
   FaceFinderSetup();
 
   Serial.println("Camera Ready! ");
@@ -135,7 +130,7 @@ void setup() {
 
   Serial.printf("\n Beginning Hardware serial port 2 TX on pin %d, RX on pin %d\n",RXPIN,TXPIN);
 
-Serial2.begin(9600,SERIAL_8N1, RXPIN, TXPIN);
+Serial2.begin(SERIAL2_BAUD,SERIAL_8N1, RXPIN, TXPIN);
   while (!Serial2)
   {
     Serial.print(".");

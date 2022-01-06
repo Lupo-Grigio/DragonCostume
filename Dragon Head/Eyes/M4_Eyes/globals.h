@@ -3,9 +3,9 @@
 #include "Adafruit_Arcada.h"
 #include "DMAbuddy.h" // DMA-bug-workaround class
 
-# define SERIAL_CONTROL
+#define SERIAL_CONTROL
 
-# define DEBUG_BAUD 115200
+#define DEBUG_BAUD 115200
 
 #if defined(GLOBAL_VAR) // #defined in .ino file ONLY!
   #define GLOBAL_INIT(X) = (X)

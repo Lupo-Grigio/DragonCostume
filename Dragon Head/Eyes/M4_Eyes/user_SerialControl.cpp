@@ -27,7 +27,7 @@
 static int foo = 42;
 static int bar = ((13.8 * 10) / 2) ; // a nice number
 
-#define SERIAL1_BAUD 9600 // make sure this matches the rate at which your sender is transmitting
+#define SERIAL1_BAUD 115200 // make sure this matches the rate at which your sender is transmitting
 
 typedef struct {
   int IS; // != 1 face not found or data tx/rx muck up co=ords are invalid
@@ -78,8 +78,8 @@ void user_setup(void)
     if(!Serial)
     {
       Serial.begin(DEBUG_BAUD);
-      while (!Serial)
-        yield();
+/*      while (!Serial)
+        yield();*/
     }
   Serial.println("\n Serial1 control over Monster M4SK Eyes");
   Serial.printf("\n Setting up PWM port to be Serial port 1 TX and RX are %d %d\n",PIN_SERIAL1_TX,PIN_SERIAL1_RX);
