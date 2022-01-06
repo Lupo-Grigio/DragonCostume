@@ -8,6 +8,9 @@ Repository for all code and designs used in my massive dragon head and costume
     Running WLED on an esp32 to power the primary LED Light Strips within the head (Fork minimal changes) (Dev environment is Platform.io in VSCode)
     The strip "Map" or definitions are created from a google sheets spreadsheet, The regions are created using several pivot tables
 
+    -/WLED
+      clone of WLED source from https://github.com/Aircoookie/WLED I _think_ this directory should be a fork.. but maybe if I actually make changes. this tweak is to get WLED to work on one of @romkey's discoball ESP32-dev boards. 
+
     -/WoWki Simulations
       Several test FASTLED simulations of the head strips coded up in WoKwi - no production code
       makes a convient(Where is my spell checker?) way to simulate the LED strips.
