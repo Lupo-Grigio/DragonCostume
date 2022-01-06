@@ -424,7 +424,7 @@ void setup() {
     eye[e].eyeY = eyeOldY;
   }
 
-#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
+#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS) && !defined(SERIAL_CONTROL)   // If turning the PWM micraphone input into serial, all this stuff needs to be ignored
   if(voiceOn) {
     if(!voiceSetup((waveform > 0))) {
       Serial.println("Voice init fail, continuing without");
@@ -936,7 +936,7 @@ void loop() {
         irisValue = irisMin + (sum * irisRange); // 0.0-1.0 -> iris min/max
         if((++iris_frame) >= (1 << IRIS_LEVELS)) iris_frame = 0;
       }
-#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
+#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS) && !defined(SERIAL_CONTROL)   // If turning the PWM micraphone input into serial, all this stuff needs to be ignored
       if(voiceOn) {
         // Read buttons, change pitch
         arcada.readButtons();

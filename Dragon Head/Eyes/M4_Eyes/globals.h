@@ -3,6 +3,10 @@
 #include "Adafruit_Arcada.h"
 #include "DMAbuddy.h" // DMA-bug-workaround class
 
+# define SERIAL_CONTROL
+
+# define DEBUG_BAUD 115200
+
 #if defined(GLOBAL_VAR) // #defined in .ino file ONLY!
   #define GLOBAL_INIT(X) = (X)
   #define INIT_EYESTRUCTS
@@ -87,7 +91,7 @@ GLOBAL_VAR int8_t    blinkPin            GLOBAL_INIT(-1); // Manual both-eyes bl
 #endif
 GLOBAL_VAR uint32_t  boopThreshold       GLOBAL_INIT(17500);
 
-#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
+#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS) && !defined(SERIAL_CONTROL) 
 GLOBAL_VAR bool      voiceOn             GLOBAL_INIT(false);
 GLOBAL_VAR float     currentPitch        GLOBAL_INIT(1.0);
 GLOBAL_VAR float     defaultPitch        GLOBAL_INIT(1.0);
@@ -220,7 +224,7 @@ extern uint32_t        availableNVM(void);
 extern uint8_t        *writeDataToFlash(uint8_t *src, uint32_t len);
 
 // Functions in pdmvoice.cpp
-#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
+#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS) && !defined(SERIAL_CONTROL) 
 extern bool              voiceSetup(bool modEnable);
 extern float             voicePitch(float p);
 extern void              voiceGain(float g);

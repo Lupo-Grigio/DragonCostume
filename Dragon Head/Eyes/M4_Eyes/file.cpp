@@ -267,7 +267,7 @@ void loadConfig(char *filename) {
         eye[e].rotation &= 3;
       }
 #endif
-#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
+#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS) && !defined(SERIAL_CONTROL)   // If turning the PWM micraphone input into serial, all this stuff needs to be ignored
       v = doc["voice"];
       if(v.is<bool>()) voiceOn = v.as<bool>();
       currentPitch = defaultPitch = doc["pitch"] | defaultPitch;

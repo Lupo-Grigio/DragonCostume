@@ -1,9 +1,12 @@
 // Basic voice changer code. This version is specific to the Adafruit
 // MONSTER M4SK board using a PDM microphone.
 
-#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
+#if defined(ADAFRUIT_MONSTER_M4SK_EXPRESS) 
 
 #include "globals.h"
+#if !defined(SERIAL_CONTROL) // don't do any of this if using the PWM as a serial input for control
+  
+
 #include <SPI.h>
 #include <Adafruit_ZeroPDMSPI.h>
 
@@ -253,5 +256,5 @@ static void voiceOutCallback(void) {
     }
   }
 }
-
+#endif // defined(SERIAL_CONTROL)   If turning the PWM micraphone input into serial, all this stuff needs to be ignored
 #endif // ADAFRUIT_MONSTER_M4SK_EXPRESS
