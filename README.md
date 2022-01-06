@@ -56,6 +56,17 @@ Repository for all code and designs used in my massive dragon head and costume
     -/Blender Models
       this is the start of the workflow, Just as it says, the blender source for the shell.
     
+    -/Pepakura
+      source files for the Shell generated using pepakura designer https://tamasoft.co.jp/pepakura-en/
+
+    -/Laser
+      RLD and DXF files for the shell cut paths
+
+    -Internal LED supports
+    The 3dprinted internal struts for the LEDs where designed in Fusion 360, then modified in tinkercad to ad direction registration and numbering then pulled into PrusaSlicer to prep for 3d printing. 
+
+
+
   -Cosmetic wrapping
     Reflective pattern created in Shilouette studio and cut on a Shilouette CAMEO 4
     
