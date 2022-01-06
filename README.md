@@ -1,6 +1,8 @@
 # DragonCostume 
 Repository for all code and designs used in my massive dragon head and costume
+
 /Dragon Head 
+
   -/Lights 
     Internal LED strips
     Running WLED on an esp32 to power the primary LED Light Strips within the head (Fork minimal changes) (Dev environment is Platform.io in VSCode)
