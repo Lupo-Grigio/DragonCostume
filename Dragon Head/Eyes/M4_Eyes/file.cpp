@@ -284,7 +284,7 @@ void loadConfig(char *filename) {
 #endif // ADAFRUIT_MONSTER_M4SK_EXPRESS
     }
     file.close();
-    user_setup(doc);
+    //user_setup(doc);
   } else {
     Serial.println("Can't open config file, using default settings");
   }
