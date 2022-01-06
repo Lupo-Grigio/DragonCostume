@@ -20,7 +20,7 @@ Repository for all code and designs used in my massive dragon head and costume
 
       -/M4_Eyes Based off of TonyLHansen's merge request into Adafruit's main. His code includes some extra eye controls and code for user.cpp files getting config info from the config file. Will be handy for me to set the BAUD rate between controller and the mask. https://github.com/adafruit/Adafruit_Learning_System_Guides/pull/915/commits/2b4827c8276a8fa8b2f16dbccf2c00a39fa4a631
     
-      -/ESP32_Camera_Controller_Demo 
+      -/ESP32-Camera-Eye-tracker
       Cloned from the ESP32-CAM/example and fixed via this commentary https://github.com/espressif/arduino-esp32/issues/5128. This directory contains the mirror code for M4_Eyes, this is the "controller" part. This does facial detection, and sends tracking data out serial port. This code is written for the Freenove ESP32-WROVER-DEV module with camera. https://www.amazon.com/Freenove-ESP32-WROVER-Bluetooth-Compatible-Tutorials/dp/B09BC5CNHM?ref_=ast_sto_dp This demo code runs a webserver and streams video, and contains VERBOSE debugging info written to the USB serial port. Face location data is written to serial 2 which is configured on pins 2 and 15, the format of the message and which pin is TX and RX are in the code. 
 
       -/Prototype Case
