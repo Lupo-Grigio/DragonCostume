@@ -1,8 +1,5 @@
 #include "esp_camera.h"
 
-// ideally you should grab the BAUD definitions from the project that this one talks to
-// through something like #include "../common_comunication_settings.h" or #include "M4_Eyes/globals.h" 
-// buuuut you just have to make sure the serial settings (Baud rate 8n1 etc.) are set the same
 
 // Detect Faces in field of view write the location to Hardware Serial 2
 //
@@ -22,32 +19,12 @@
 //#define CAMERA_MODEL_TTGO_T_JOURNAL // No PSRAM
 
 #include "camera_pins.h"
+#include "FaceReporting.h"
+#include "video_analizer.h"
 
 
 
 
-// Freemove WROVER most of the GPIO are used by the camera...
-// GPIO 32 and 33 are not used by the camera
-// GPIO 12  and 15 9  2 3 are not used by camera GPIO 12 is pulled hi
-// GPIO 1, is'nt that usually USB? avoiding
-// GPIO 2 looks good
-// GPIO 14 is used below
-// Picking GPIO 9 ... Buuuttt not available as a pin on the package
-
-// the only way you know which pins they are on the package is the silk screen
-#define RXPIN 15
-#define TXPIN 2
-
-#define DEBUG_BAUD 115200
-#define SERIAL2_BAUD 115200 // make sure this matches the rate at which your sender is transmitting
-
-
-
-void FaceFinderSetup();
-void FindFaces();
-bool IsFaceFound();
-void GetFaceLocation( int *x, int *y, int *w, int *h);
-void requestFaceLocationEvent();
 
 void setup() {
   Serial.begin(DEBUG_BAUD);
@@ -117,26 +94,13 @@ void setup() {
   s->set_hmirror(s, 1);
 #endif
 
-  FaceFinderSetup();
 
+  VideoSetup();
   Serial.println("Camera Ready! ");
 
+  FaceReportingSetup();
 
-    // define pin modes for tx, rx:
-  Serial.println("\n Hardware Serial Out Setting Pin Modes");
-  pinMode(RXPIN, INPUT);
-  pinMode(TXPIN, OUTPUT);
-  delay(100);
-
-  Serial.printf("\n Beginning Hardware serial port 2 TX on pin %d, RX on pin %d\n",RXPIN,TXPIN);
-
-Serial2.begin(SERIAL2_BAUD,SERIAL_8N1, RXPIN, TXPIN);
-  while (!Serial2)
-  {
-    Serial.print(".");
-  }
-  
-  Serial.printf("\n ESP32 Face Detector ready to go writing face locations to TX on %d and RX on %d\n",TXPIN,RXPIN);
+  Serial.printf("\n ESP32 Face Detector ready to go ");
 }
 
 // do not perform time-consuming tasks inside this function,
@@ -149,57 +113,8 @@ void loop() {
   WriteFaceLocation();
   // with the demo web server, running face detection gets me like 
   // 2 frames a second. so it does not do much good to check any faster than that
-  int framerate = 2;
-    delay(1000 / framerate );
+  // int framerate = 2;
+  //  delay(1000 / framerate );
 }
 
-// function that executes from the main loop of the program
 
-void WriteFaceLocation()
-{
-  
-  int  Face_X = 0;
-  int  Face_Y = 0;
-  int  Face_H = 0;
-  int  Face_W = 0;
-  int LocationArray[5]; // Found
-                         // X
-                         // Y
-                         // W
-                         // H
-  if (IsFaceFound())
-  {
-    // yes I know I should have just wirtten this function to pass the address of the array
-    // but guess what, moving small amounts of data on and off the stack is faster!
-    // and the optimizer will do it's job to pack this code real tight
-    GetFaceLocation(  &Face_X,
-                      &Face_Y,
-                      &Face_H,
-                      &Face_W );
-      
-      LocationArray[0] = 1;
-      LocationArray[1] = Face_X;
-      LocationArray[2] = Face_Y;
-      LocationArray[3] = Face_W;
-      LocationArray[4] = Face_H;                        
- 
-
-      Serial2.printf(" Face found = %i X = %i Y = %i W = %i H = %i \n ",
-                    LocationArray[0],
-                    LocationArray[1],
-                    LocationArray[2],
-                    LocationArray[3],
-                    LocationArray[4]
-      );
-      
-      Serial.printf(" Wrote to Serial face found = %i X = %i Y = %i W = %i H = %i \n ",
-                    LocationArray[0],
-                    LocationArray[1],
-                    LocationArray[2],
-                    LocationArray[3],
-                    LocationArray[4]
-      );
-      Serial.println("\n");
-   }
-
-}

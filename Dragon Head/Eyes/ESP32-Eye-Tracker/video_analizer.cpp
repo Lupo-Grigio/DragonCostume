@@ -6,6 +6,9 @@
 #include "fb_gfx.h"
 #include "fd_forward.h"
 #include "fr_forward.h"
+#include "video_analizer.h"
+#include "FaceReporting.h"
+
 
 static mtmn_config_t mtmn_config = {0};
 
@@ -49,56 +52,9 @@ static int ra_filter_run(ra_filter_t * filter, int value){
     return filter->sum / filter->count;
 }
 
-/*
- * Serial face Location reporting support
- * THIS CODE IS NOT THREAD SAFE.. Yet.
- * TODO: Get ride of the global variable
- * TODO: Create a typedef struct for face location
- * TODO: Change all these functions to take pointer parameters and stop fiddeling with global variables yuk. 
- * TODO: Change all these functions to take a pointer to a Face location struct
- * TODO: in the .ino file call these functions with a pointer to a face locations struct
- * TODO: in the ino declare a single global instance of a face location struct
- */
-bool  FaceFound = false;
-int  Face_X = 0;
-int  Face_Y = 0;
-int  Face_H = 0;
-int  Face_W = 0;
 
-void SetFaceFoundAt( int x, int y, int w, int h)
- {
-  FaceFound = true;
-  Face_X = x;
-  Face_Y = y;
-  Face_W = w;
-  Face_H = h;
 
- }
- 
-void SetNoFaceFound()
- {
-  FaceFound = false;
-  Face_X = 0;
-  Face_Y = 0;
-  Face_W = 0;
-  Face_H = 0;
-
- }
- 
-void GetFaceLocation( int *x, int *y, int *w, int *h)
-{
-  *x = (int)Face_X;
-  *y = (int)Face_Y;
-  *w = (int)Face_W;
-  *h = (int)Face_H;
-}
-
-bool IsFaceFound()
-{
-  return FaceFound;
-}
-
-void FaceFinderSetup()
+void VideoSetup()
 {
     ra_filter_init(&ra_filter, 20);
     mtmn_config.type = FAST;
