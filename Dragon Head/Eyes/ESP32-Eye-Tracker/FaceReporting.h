@@ -9,6 +9,9 @@
 #define DEBUG_BAUD 115200
 #define SERIAL2_BAUD 115200 // make sure this matches the rate at which your sender is transmitting
 
+#define DEBUG_FACE         // write face locations to serial out
+#undef DEBUG_FRAMERATE     // define to turn on writing framerate info to USB for every frame.
+
 // Freemove WROVER most of the GPIO are used by the camera...
 // GPIO 32 and 33 are not used by the camera
 // GPIO 12  and 15 9  2 3 are not used by camera GPIO 12 is pulled hi
@@ -44,7 +47,7 @@ typedef struct {
 } FaceLocationStruct;
 
 static const float RangeFudge = 0.2;
-static const char FaceLocationReportFormat[] = " Face found = %i X = %i Y = %i W = %i H = %i \n ";
+static const char FaceLocationReportFormat[] = " Face found = %i X = %i Y = %i W = %i H = %i \n ";DEBUG_FACE
 
 void FaceReportingSetup();
 void SetFaceFoundAt( int x, int y, int w, int h);

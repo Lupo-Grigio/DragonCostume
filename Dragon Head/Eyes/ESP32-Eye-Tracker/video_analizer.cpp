@@ -70,6 +70,74 @@ void VideoSetup()
     mtmn_config.o_threshold.score = 0.7;
     mtmn_config.o_threshold.nms = 0.7;
     mtmn_config.o_threshold.candidate_number = 1;
+
+    // set up the camera, Frame Size do the flip, and the mirror, and set wB to high etc. 
+    // If this code looks wierd, it is because I'm using the same format as the ESP32-CAMERA demo
+    // so that if you are looking at this, coming from that demo, this all looks familiar
+
+    sensor_t * s = esp_camera_sensor_get();
+    int res = 0;
+    int val = 0;
+
+    // res = s->set_framesize(s, (framesize_t)val);
+    // res = s->set_quality(s, val);
+    // res = s->set_contrast(s, val);
+    // res = s->set_brightness(s, val);
+    // res = s->set_saturation(s, val);
+    // res = s->set_gainceiling(s, (gainceiling_t)val);
+    // res = s->set_colorbar(s, val);
+    // res = s->set_whitebal(s, val);
+    // res = s->set_gain_ctrl(s, val);
+    // res = s->set_exposure_ctrl(s, val);
+    res = s->set_hmirror(s, H_MIRROR);
+    res = s->set_vflip(s, V_FLIP);
+    // res = s->set_awb_gain(s, val);
+    // res = s->set_agc_gain(s, val);
+    // res = s->set_aec_value(s, val);
+    // res = s->set_aec2(s, val);
+    // res = s->set_dcw(s, val);
+    // res = s->set_bpc(s, val);
+    // res = s->set_wpc(s, val);
+    // res = s->set_raw_gma(s, val);
+    // res = s->set_lenc(s, val);
+    // res = s->set_special_effect(s, val);
+    // res = s->set_wb_mode(s, val);
+    // res = s->set_ae_level(s, val);
+
+    static char json_response[1024];
+    char * p = json_response;
+    *p++ = '{';
+
+    p+=sprintf(p, "\"framesize\":%u,", s->status.framesize);
+    p+=sprintf(p, "\"quality\":%u,", s->status.quality);
+    p+=sprintf(p, "\"brightness\":%d,", s->status.brightness);
+    p+=sprintf(p, "\"contrast\":%d,", s->status.contrast);
+    p+=sprintf(p, "\"saturation\":%d,", s->status.saturation);
+    p+=sprintf(p, "\"sharpness\":%d,", s->status.sharpness);
+    p+=sprintf(p, "\"special_effect\":%u,", s->status.special_effect);
+    p+=sprintf(p, "\"wb_mode\":%u,", s->status.wb_mode);
+    p+=sprintf(p, "\"awb\":%u,", s->status.awb);
+    p+=sprintf(p, "\"awb_gain\":%u,", s->status.awb_gain);
+    p+=sprintf(p, "\"aec\":%u,", s->status.aec);
+    p+=sprintf(p, "\"aec2\":%u,", s->status.aec2);
+    p+=sprintf(p, "\"ae_level\":%d,", s->status.ae_level);
+    p+=sprintf(p, "\"aec_value\":%u,", s->status.aec_value);
+    p+=sprintf(p, "\"agc\":%u,", s->status.agc);
+    p+=sprintf(p, "\"agc_gain\":%u,", s->status.agc_gain);
+    p+=sprintf(p, "\"gainceiling\":%u,", s->status.gainceiling);
+    p+=sprintf(p, "\"bpc\":%u,", s->status.bpc);
+    p+=sprintf(p, "\"wpc\":%u,", s->status.wpc);
+    p+=sprintf(p, "\"raw_gma\":%u,", s->status.raw_gma);
+    p+=sprintf(p, "\"lenc\":%u,", s->status.lenc);
+    p+=sprintf(p, "\"vflip\":%u,", s->status.vflip);
+    p+=sprintf(p, "\"hmirror\":%u,", s->status.hmirror);
+    p+=sprintf(p, "\"dcw\":%u,", s->status.dcw);
+    p+=sprintf(p, "\"colorbar\":%u,", s->status.colorbar);
+    *p++ = '}';
+    *p++ = 0;
+    Serial.printf("\n Camera Configuration : %s\n",p);
+    
+
 }
 
 void FindFaces()
@@ -140,7 +208,7 @@ void FindFaces()
                                  * you really want to "look" at the eyes
                                  */
                                 SetFaceFoundAt((int)net_boxes->landmark[0].landmark_p[0],
-                                               (int)net_boxes->landmark[0].landmark_p[0],
+                                               (int)net_boxes->landmark[0].landmark_p[1],
                                                image_matrix->w,
                                                image_matrix->h
                                                );
@@ -186,6 +254,7 @@ void FindFaces()
         if(res != ESP_OK){
            // break; // if this becomes a loop function
         }
+#ifdef DEBUG_FRAMERATE
         int64_t fr_end = esp_timer_get_time();
 
         int64_t ready_time = (fr_ready - fr_start)/1000;
@@ -206,6 +275,7 @@ void FindFaces()
             (detected)?"DETECTED ":"", face_id,
             (detected)?"First Location ":"", face_x, ",", face_y
         );
+#endif
     //}
 
     last_frame = 0;

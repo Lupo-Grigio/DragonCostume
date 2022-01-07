@@ -112,7 +112,7 @@ void WriteFaceLocation()
       );
       
      // Debug write the message out according to the format defined in FaceReporting.h
-
+#ifdef DEBUG_FACE
       Serial.printf(FaceLocationReportFormat,
                     FaceAt.IS,
                     FaceAt.X ,
@@ -121,6 +121,7 @@ void WriteFaceLocation()
                     FaceAt.H 
       );
       Serial.println("\n");
+#endif
    }
 
 }
