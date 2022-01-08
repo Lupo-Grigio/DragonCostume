@@ -292,7 +292,7 @@ static esp_err_t capture_handler(httpd_req_t *req){
         * you really want to "look" at the eyes
         */
         SetFaceFoundAt((int)net_boxes->landmark[0].landmark_p[0],
-                        (int)net_boxes->landmark[0].landmark_p[0],
+                        (int)net_boxes->landmark[0].landmark_p[1],
                         image_matrix->w,
                         image_matrix->h
                         );
@@ -411,7 +411,7 @@ static esp_err_t stream_handler(httpd_req_t *req){
                                  * you really want to "look" at the eyes
                                  */
                                 SetFaceFoundAt((int)net_boxes->landmark[0].landmark_p[0],
-                                               (int)net_boxes->landmark[0].landmark_p[0],
+                                               (int)net_boxes->landmark[0].landmark_p[1],
                                                image_matrix->w,
                                                image_matrix->h
                                                );

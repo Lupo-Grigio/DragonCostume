@@ -24,7 +24,7 @@
 #include "FaceReporting.h"
 
 const char* ssid = "****";
-const char* password = "*****";
+const char* password = "****";
 
 void startCameraServer();
 

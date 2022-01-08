@@ -153,17 +153,6 @@ bool HandelSerialInput()
       Serial.println(IncomingString);
       
       ParceIncomingString(IncomingString,  &FaceAt);
-      Serial.printf(FaceLocationRangeReportFormat,
-                    FaceAt.IS,
-                    FaceAt.X ,
-                    FaceAt.Y ,
-                    FaceAt.W ,
-                    FaceAt.H ,
-                    FaceAt.W_Min,
-                    FaceAt.H_Min,
-                    FaceAt.W_Max,
-                    FaceAt.H_Max
-      );
       ret = true;
       IncomingString.remove(1); // empty the string
       moveEyesRandomly = false; // stop random eye movement TODO: Time this to prevent jerking
@@ -173,6 +162,8 @@ bool HandelSerialInput()
     {
       Serial.print(IncomingString);
       Serial.println(" Reached end of buffer before EOM");
+      // incomplete message, just throw it away, something may be goig wrong
+
     }
   }
   return(ret); 
