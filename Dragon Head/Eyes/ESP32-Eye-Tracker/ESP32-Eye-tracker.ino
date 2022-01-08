@@ -30,7 +30,7 @@ void setup() {
   Serial.begin(DEBUG_BAUD);
   Serial.setDebugOutput(true);
 
-  Serial.print("\nFace Dector for ESP32");
+  Serial.print("\nFace Detector for ESP32");
   Serial.println();
 
   camera_config_t config;

@@ -46,8 +46,10 @@ typedef struct {
 
 } FaceLocationStruct;
 
-static const float RangeFudge = 0.2;
-static const char FaceLocationReportFormat[] = " Face found = %i X = %i Y = %i W = %i H = %i \n ";DEBUG_FACE
+static const float WRangeFudge = 0.2; // these guesses based on testing
+static const float HRangeFudge = 0.4; // these guesses based on testing
+static const char FaceLocationReportFormat[] = " Face found = %i X = %i Y = %i W = %i H = %i \n ";
+static const char FaceLocationRangeReportFormat[] = " Face found = %i X = %i Y = %i W = %i H = %i W_Min = %i H_Min = %i W_Max = %i H_Max = %i\n ";
 
 void FaceReportingSetup();
 void SetFaceFoundAt( int x, int y, int w, int h);
