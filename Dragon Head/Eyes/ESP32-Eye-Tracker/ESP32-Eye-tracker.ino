@@ -111,10 +111,7 @@ void loop() {
   FindFaces();
 
   WriteFaceLocation();
-  // with the demo web server, running face detection gets me like 
-  // 2 frames a second. so it does not do much good to check any faster than that
-  // int framerate = 2;
-  //  delay(1000 / framerate );
+
 }
 
 

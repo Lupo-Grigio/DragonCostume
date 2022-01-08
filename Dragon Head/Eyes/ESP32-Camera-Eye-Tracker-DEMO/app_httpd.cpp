@@ -21,6 +21,8 @@
 #include "fb_gfx.h"
 #include "fd_forward.h"
 #include "fr_forward.h"
+#include "FaceReporting.h"
+
 
 #define ENROLL_CONFIRM_TIMES 5
 #define FACE_ID_SAVE_NUMBER 7
@@ -62,54 +64,6 @@ static int8_t recognition_enabled = 0;
 static int8_t is_enrolling = 0;
 static face_id_list id_list = {0};
 
-/*
- * Serial face Location reporting support
- * THIS CODE IS NOT THREAD SAFE.. Yet.
- * TODO: Get ride of the global variable
- * TODO: Create a typedef struct for face location
- * TODO: Change all these functions to take pointer parameters and stop fiddeling with global variables yuk. 
- * TODO: Change all these functions to take a pointer to a Face location struct
- * TODO: in the .ino file call these functions with a pointer to a face locations struct
- * TODO: in the ino declare a single global instance of a face location struct
- */
-bool  FaceFound = false;
-int  Face_X = 0;
-int  Face_Y = 0;
-int  Face_H = 0;
-int  Face_W = 0;
-
-void SetFaceFoundAt( int x, int y, int w, int h)
- {
-  FaceFound = true;
-  Face_X = x;
-  Face_Y = y;
-  Face_W = w;
-  Face_H = h;
-
- }
- 
-void SetNoFaceFound()
- {
-  FaceFound = false;
-  Face_X = 0;
-  Face_Y = 0;
-  Face_W = 0;
-  Face_H = 0;
-
- }
- 
-void GetFaceLocation( int *x, int *y, int *w, int *h)
-{
-  *x = (int)Face_X;
-  *y = (int)Face_Y;
-  *w = (int)Face_W;
-  *h = (int)Face_H;
-}
-
-bool IsFaceFound()
-{
-  return FaceFound;
-}
 
 static ra_filter_t * ra_filter_init(ra_filter_t * filter, size_t sample_size){
     memset(filter, 0, sizeof(ra_filter_t));
@@ -331,11 +285,28 @@ static esp_err_t capture_handler(httpd_req_t *req){
         if(recognition_enabled){
             face_id = run_face_recognition(image_matrix, net_boxes);
         }
+        /*
+        * I could just use the x and y coords from the box
+        * or I could calculate the center of the box and send that
+        * but the first landmark is (usually) one of the eyes, and 
+        * you really want to "look" at the eyes
+        */
+        SetFaceFoundAt((int)net_boxes->landmark[0].landmark_p[0],
+                        (int)net_boxes->landmark[0].landmark_p[0],
+                        image_matrix->w,
+                        image_matrix->h
+                        );
         draw_face_boxes(image_matrix, net_boxes, face_id);
         dl_lib_free(net_boxes->score);
         dl_lib_free(net_boxes->box);
         dl_lib_free(net_boxes->landmark);
         dl_lib_free(net_boxes);
+    }
+    else
+    {           
+        detected = false;
+     
+        SetNoFaceFound();
     }
 
     jpg_chunking_t jchunk = {req, 0};
@@ -445,8 +416,7 @@ static esp_err_t stream_handler(httpd_req_t *req){
                                                image_matrix->h
                                                );
                                                    
-                                /*face_x = (int)boxes->box[0].box_p[0];
-                                face_y = (int)boxes->box[0].box_p[1];*/
+  
                                 face_x = (int)net_boxes->landmark[0].landmark_p[0];
                                 face_y = (int)net_boxes->landmark[0].landmark_p[1];
                                 dl_lib_free(net_boxes->score);
