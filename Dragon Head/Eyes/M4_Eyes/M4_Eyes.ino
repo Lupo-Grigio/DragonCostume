@@ -912,7 +912,7 @@ void loop() {
             } else {
               lastLightReadTime = t - LIGHT_INTERVAL + 30000; // Try again in 30 ms
             }
-	  }
+	        }
         }
         irisValue = (irisValue * 0.97) + (lastLightValue * 0.03); // Filter response for smooth reaction
       } else {
