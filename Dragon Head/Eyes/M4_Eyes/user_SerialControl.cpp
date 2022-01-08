@@ -21,7 +21,6 @@
 // * The other 2 pins are +5 and Ground. You can _almost_ ignore those unless you want to power whatever is sending you serial (not recommended for anything that takes more current than a PWM microphone)
 // * it is good pratice to tie the ground to ground somewhere, and for long cables twist the cable bundle gently so the ground wire wraps around TX and RX
 
-// TODO: maybe spruce this method up so that individual user contributed functionality can be added through a "user.h" header file
 
 // User globals can go here, recommend declaring as static, e.g.:
 static int foo = 42;
@@ -29,12 +28,32 @@ static int bar = ((13.8 * 10) / 2) ; // a nice number
 
 #define SERIAL1_BAUD 115200 // make sure this matches the rate at which your sender is transmitting
 
+// USE the same format string from the sister project to this one
+// for example ../ESP32-Eye-Tracker/FaceRepoting.h
+// ideally we would just include that here, but for a good explination
+// why we can't google " arduino include headder files from other directories"
+static const char FaceLocationRangeReportFormat[] = " Face found = %i X = %i Y = %i W = %i H = %i W_Min = %i H_Min = %i W_Max = %i H_Max = %i\n ";
+
 typedef struct {
   int IS; // != 1 face not found or data tx/rx muck up co=ords are invalid
   int X; // X co-ord of face
   int Y; // Y co-ord of face
-  int W; // Width of field
-  int H; // Height of field
+  int W; // maximum value along the horizontal, Should be <= SCREEN_WIDTH
+  int H; // maximum value along the vertical, should be <= SCREEN_HEIGHT
+  
+  // A face detected in the field of view will never have it's X and Y values
+  // be either 0 or the maximum bounds of the edge of the FOV. 
+  // ALSO, resolution could be changed dynamically
+  // So we send along the minimum and maximum values along X and Y we have seen
+  // this allows the Reciever to decide how to map the range of X and Y 
+  // more dynamiclly and approprately
+  // this will mean that X and Y will need to be mapped based on a range that is 
+  // assumed to be changing for each frame. 
+  int W_Min; // minimum range of the horizontal, should be >= 0 and <= W
+  int H_Min; // minimum range of the vertical, should be >= 0 and <= H
+  int W_Max; // minimum range of the horizontal, should be >= 0 and <= W
+  int H_Max; // minimum range of the vertical, should be >= 0 and <= H
+
 } FaceLocationStruct;
 
 bool HandelSerialInput();
@@ -134,13 +153,17 @@ bool HandelSerialInput()
       Serial.println(IncomingString);
       
       ParceIncomingString(IncomingString,  &FaceAt);
-      Serial.printf(" Parsed data looks like :%i,%i,%i,%i,%i\n",
-                            FaceAt.IS,
-                            FaceAt.X,
-                            FaceAt.Y,
-                            FaceAt.W,
-                            FaceAt.H  
-                    );
+      Serial.printf(FaceLocationRangeReportFormat,
+                    FaceAt.IS,
+                    FaceAt.X ,
+                    FaceAt.Y ,
+                    FaceAt.W ,
+                    FaceAt.H ,
+                    FaceAt.W_Min,
+                    FaceAt.H_Min,
+                    FaceAt.W_Max,
+                    FaceAt.H_Max
+      );
       ret = true;
       IncomingString.remove(1); // empty the string
       moveEyesRandomly = false; // stop random eye movement TODO: Time this to prevent jerking
@@ -167,110 +190,61 @@ bool HandelSerialInput()
 void ParceIncomingString( String str, FaceLocationStruct* fat  )
 {
   str.trim(); // remove leading and trailing whitespace
-  sscanf(str.c_str()," Face found = %i X = %i Y = %i W = %i H = %i \n", 
+  sscanf(str.c_str(),FaceLocationRangeReportFormat, 
                       &fat->IS,
                       &fat->X,
                       &fat->Y,
                       &fat->W,
-                      &fat->H
+                      &fat->H,
+                      &fat->W_Min,
+                      &fat->H_Min,
+                      &fat->W_Max,
+                      &fat->H_Max
                       );
-  Serial.printf(" Pointer Playground returned %i X = %i Y = %i W = %i H = %i \n", 
+
+  Serial.printf(FaceLocationRangeReportFormat, 
                       fat->IS,
                       fat->X,
                       fat->Y,
                       fat->W,
-                      fat->H
-  );
+                      fat->H,
+                      fat->W_Min,
+                      fat->H_Min,
+                      fat->W_Max,
+                      fat->H_Max       
+                      );
 }
 
 // point the eyes at a location
-// TODO What is the eye scale, how wide and how tall
-// TODO Go find the scale factor code from the old python
+
 void LookAt(FaceLocationStruct* fat)
 {
-  // X is some % of the distance from 1 to W, the eyes horizontal scale is -1 to 1
-  // Y is some % of the distance from 1 to H, the eyes vertical scale is -11 to 1
 
 
-  // Face location X is some point between 1 and W, 
-  // the eyeTargetX needs to be a value between 1 and DISPLAY_SIZE 
-  //   that is porportional to X's distance between 1 and W
-  // ditto for Y and H
+  // X is some % of the distance from W_Min to W_Max inclusive (X could be = W_Min or max)
+  // Y is some % of the distance from H_Min to H_Max inclusive (X could be = H_Min or max)
+
+  // the range for eyeTargetX is a Float value between -1 and 1 with 0 being stright forward
+  // the range for eyeTargetY is a float value between -1 and 1 with a 0 being straight forward
+
   // This is why the map() function exists. Because we all had to learn x is what percent of Y in algebra
   // and because the arduino map function can return out of range values...
   // this is why the constrain() function exists
 
+  // BUUUT... the X and Y values don't actually go from 0 to W and H
+
   float screenX,screenY;
     eyeTargetX = (
                   (float)constrain(
-                    map(fat->X, 1, fat->W, -10000, 10000),    // Need to map X which is an int to a float value between -1 and 1
+                    map(fat->X, fat->W_Min, fat->W_Max, -10000, 10000),    // Need to map X which is an int to a float value between -1 and 1
                   -10000, 10000)
                   ) / (float)10000.0000;                       // so I map to a range that is [-1,1]x10000 then just divide the result by 10000 as a float. 
                 
-  eyeTargetY = (
+    eyeTargetY = (
                   (float)constrain(                                 // see commentary in rendering code for why -y
-                    map(fat->Y, 1, fat->H, -10000, 10000),    // where would X be if it was in a range of DISPLAY_SIZE
+                    map(fat->Y, fat->H_Min, fat->H_Max, -10000, 10000),    // where would X be if it was in a range of DISPLAY_SIZE
                   -10000, 10000)
                   ) / (float)10000.0000;
-  // scale the camera co-ordinates to screen co-ordinates
-  /*
-   * now in a sane world we would just map the incoming range to screen co-ordinates
-   
-  eyeTargetX = (float)constrain(
-                map(fat->X, 1, fat->W, 110, 310),    // where would X be if it was in a range of DISPLAY_SIZE
-                110, 310);
-  eyeTargetY = (float)constrain(                                 // see commentary in rendering code for why -y
-                map(fat->Y, 1, fat->H, 110, 310),    // where would X be if it was in a range of DISPLAY_SIZE
-                110, 310);
-  
-  int r = (mapDiameter - DISPLAY_SIZE * M_PI_2) * 0.9;
-  eyeTargetX = (float)constrain(
-                map(fat->X, 1, fat->W, -r, r),    // where would X be if it was in a range of DISPLAY_SIZE
-                -r,r);
-  eyeTargetY = (float)constrain(                                 // see commentary in rendering code for why -y
-                map(fat->Y, 1, fat->H, -r, r),    // where would X be if it was in a range of DISPLAY_SIZE
-               -r,r);
-               */
-    /* 
-    now I have translated the incoming co-ordinates to screen co-ordinates
-    any sane person would have jsut set eyeTargetX, eyeTargetY to those values and we're goldent
-    buuuutttt noooooo. 
-   The eye gase point calculation is really bizzarre.. 
-  
-                  
-    r is the radius in X and Y that the eye can go, from (0,0) in the center.
-   
-   float r = ((float)mapDiameter - (float)DISPLAY_SIZE * M_PI_2) * 0.75;
-              eyeNewX = random(-r, r);
-              float h = sqrt(r * r - eyeNewX * eyeNewX);
-              eyeNewY = random(-h, h);
-
-    and if you just set eyeTargetX and eyeTargetY, and turn off random movement... your values get mangled by the following code
-
-        float r = ((float)mapDiameter - (float)DISPLAY_SIZE * M_PI_2) * 0.9;
-        eyeX = mapRadius + eyeTargetX * r;
-        eyeY = mapRadius + eyeTargetY * r;
-
-    
-  // r is the radius in X and Y that the eye can go, from (0,0) in the center.
-  // NOTE: This differens from teh calculation in M4_eyes I'm using integer math here
-  // because I'm using the map function
-  int r = (mapDiameter - DISPLAY_SIZE * M_PI_2) * 0.9; 
-  // so now our scale of values ranges from -r to r
-  // our input data scale is (for x) 1 to W (for y) 1 to H 
-
- // maybe need to divide by r and subtract radius? do the reverse of what happens in M4_Eyes
-  eyeTargetX = (float)constrain(
-                map(fat->X, 1, fat->W, -r, r),    // where would X be if it was in a constrained range of r to -r
-                -r,r);
-  eyeTargetY = (float)constrain(                                 // see commentary in rendering code for why -y
-                map(fat->Y, 1, fat->H, -r, r),    // where would X be if it was in a constrained range of r to -r
-                -r,r);
-  int r = (mapDiameter - DISPLAY_SIZE * M_PI_2) * 0.9; 
-
-  eyeTargetX = mapRadius - eyeTargetX / r; // man I dunno, I'm doing the reverse of what m4_eyes does to the numbers
-  eyeTargetY = mapRadius - eyeTargetX / r;
-                      */
 
   Serial.printf("Mapped values are %f , %f \n", eyeTargetX, eyeTargetY);
 }
@@ -278,22 +252,7 @@ void LookAt(FaceLocationStruct* fat)
 static int count = 0;
 void user_loop(void) {
 
-/*
- * psudeo code
- * if (read_complete_message() 
- * {   // process and store any data in the UART serial buffer
- *    when input char = End Of Message
- *    set_random_look = false
- *    parse_message(string message, *Address)     // true if message is parced successfully
- *    {
- *        LookAt(Location)
- *    }
- * } 
- * else
- * {
- *   set_random_look = true
- * }
- */
+
   if (!HandelSerialInput())
   {
     count++;
@@ -305,9 +264,6 @@ void user_loop(void) {
     count = 0;
   }
 
-  // Set values for the new X and Y.
-  //eyeTargetX = heatSensor.x;
- // eyeTargetY = -heatSensor.y;
 }
 
 
