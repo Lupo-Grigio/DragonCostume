@@ -31,13 +31,12 @@ void startCameraServer();
 
 void setup() {
   Serial.begin(DEBUG_BAUD);
-  Serial.setDebugOutput(true);
 #ifdef DEBUG_FACE
   while (!Serial)             // this bit of code helps when a device dropps off USB after an upload
      delay(10);
 #endif
 
-  Serial.print("\nFace Dector for ESP32");
+  Serial.print("\nFace Dector Demo for ESP32");
   Serial.println();
 
   camera_config_t config;
