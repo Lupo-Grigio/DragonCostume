@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"name": "WLED",
+			"path": "../../Lights/WLED"
+		}
+	],
+	"settings": {}
+}
