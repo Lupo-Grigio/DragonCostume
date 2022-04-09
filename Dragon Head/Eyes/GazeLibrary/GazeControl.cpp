@@ -1,6 +1,10 @@
 /********************************* Gaze Library Functions *************************/
 
 #include "GazeControl.h"
+#ifndef dtostrf
+char *dtostrf (double val, signed char width, unsigned char prec, char *sout);
+#define NODTOSTRF
+#endif
 
 /* 
  * ParceIncomingString
@@ -16,36 +20,40 @@
 void ParceIncomingString( String* str, GazeControlStruct* Gaze  )
 {
   str->trim(); // remove leading and trailing whitespace
+  
+  // NOTE X and Y are SIGNED FLOAT values that come to us as STRINGS
+  // The strings should be less than 8 bytes each but we are not taking a chance
+  char X[16];
+  char Y[16];
+
+
   sscanf(str->c_str(),GazeControlMessageFormat, 
                       &Gaze->IS,
-                      &Gaze->X,
-                      &Gaze->Y,
+                      X,
+                      Y,
                       &Gaze->B,
                       &Gaze->P,
                       &Gaze->M,
                       &Gaze->W,
-                      &Gaze->H,
-                      &Gaze->W_Min,
-                      &Gaze->H_Min,
-                      &Gaze->W_Max,
-                      &Gaze->H_Max
+                      &Gaze->H
                       );
+
+  // and since Arduino sscanf does not support floats
+  // turn the X and Y strings I just read into proper float values
+  Gaze->X = atof(X);
+  Gaze->Y = atof(Y);
+
 #if defined(DEBUG)
 
- Serial.print("Message Parsed : ");
+ Serial.printf("Actual float values converted: X = %6.4f Y=%6.4f Message Parsed \n : ",Gaze->X,Gaze->Y);
  Serial.printf(GazeControlMessageFormat, 
                       Gaze->IS,
-                      Gaze->X,
-                      Gaze->Y,
+                      X,
+                      Y,
                       Gaze->B,
                       Gaze->P,
                       Gaze->M,
-                      Gaze->W,
-                      Gaze->H,
-                      Gaze->W_Min,
-                      Gaze->H_Min,
-                      Gaze->W_Max,
-                      Gaze->H_Max       
+                      Gaze->W     
                       );
   Serial.println(" : ");
 
@@ -58,20 +66,29 @@ void ParceIncomingString( String* str, GazeControlStruct* Gaze  )
 void BuildMessageString( String* str, GazeControlStruct* Gaze )
 {
   char buf[1024];
+
+  // So the problem is that %f is not supported by arduino and _may_ be 
+  // supported by your particular chip, but it may be a non standard implementation
+  // Soooo... Ancient technique.. use Atof and dtostrf to convert from float and back
+  // build X as a string from float value
+  // Build Y as a string from a float value
+  char X[16];
+  char Y[16];
+  
+  dtostrf(Gaze->X,6,4,X); // convert X into a string 6 chars long with a 4 place percision so it should look something like -0.1234
+  dtostrf(Gaze->Y,6,4,Y); // and another. look up docs and examples for dtostrf. it is odd compared to most other functions at this level.
+
   sprintf(buf,GazeControlMessageFormat, 
                       Gaze->IS,
-                      Gaze->X,
-                      Gaze->Y,
+                      X,
+                      Y,
                       Gaze->B,
                       Gaze->P,
                       Gaze->M,
                       Gaze->W,
-                      Gaze->H,
-                      Gaze->W_Min,
-                      Gaze->H_Min,
-                      Gaze->W_Max,
-                      Gaze->H_Max       
+                      Gaze->H    
                       );
+
   str->remove(0); // clear the string
   str->concat(buf);
 
@@ -220,6 +237,57 @@ void CoreI2CWriteGaze( GazeControlStruct* Gaze, TwoWire* Bus)
 
 }
 
+#ifdef NODTOSTRF  // turns out not all arduino implementations have dtostrf
+
+   
+/*
+https://github.com/arduino/Arduino/blob/a2e7413d229812ff123cb8864747558b270498f1/hardware/arduino/sam/cores/arduino/avr/dtostrf.c
+  dtostrf - Emulation for dtostrf function from avr-libc
+  Copyright (c) 2013 Arduino.  All rights reserved.
+  Written by Cristian Maglie <c.maglie@bug.st>
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+char *dtostrf (double val, signed char width, unsigned char prec, char *sout) {
+  char fmt[20];
+  sprintf(fmt, "%%%d.%df", width, prec);
+  sprintf(sout, fmt, val);
+  return sout;
+}
+
+#endif
+
+
+#ifdef FACETRACKING
+
+/* TODO Removing the maxes from the message
+ * and transforming the message from int's to floats
+ * The face detection functions will have to figure how to deal with the mins and maxes that used to be transmitted
+
+ // A face detected in the field of view will never have it's X and Y values
+  // be either 0 or the maximum bounds of the edge of the FOV. 
+  // ALSO, resolution could be changed dynamically
+  // So we send along the minimum and maximum values along X and Y we have seen
+  // this allows the Reciever to decide how to map the range of X and Y 
+  // more dynamiclly and approprately
+  // this will mean that X and Y will need to be mapped based on a range that is 
+  // assumed to be changing for each frame. 
+  int W_Min; // minimum range of the horizontal, should be >= 0 and <= W
+  int H_Min; // minimum range of the vertical, should be >= 0 and <= H
+  int W_Max; // minimum range of the horizontal, should be >= 0 and <= W
+  int H_Max; // minimum range of the vertical, should be >= 0 and <= H
+*/
+// 
 void LookAtFaceScaled(EyeLocStruct* Eye, GazeControlStruct* fat)
 {
 
@@ -254,4 +322,5 @@ void LookAtFaceScaled(EyeLocStruct* Eye, GazeControlStruct* fat)
 
 
 }
+#endif
 
