@@ -6,6 +6,7 @@
 
 #include "Adafruit_Arcada.h"
 #include "DMAbuddy.h" // DMA-bug-workaround class
+//TOD IFDEF THIS OUT
 
 #if defined(GLOBAL_VAR) // #defined in .ino file ONLY!
   #define GLOBAL_INIT(X) = (X)
@@ -78,6 +79,10 @@ GLOBAL_VAR uint32_t  gazeMax             GLOBAL_INIT(3000000); // Max wait time 
 GLOBAL_VAR bool      moveEyesRandomly    GLOBAL_INIT(true);   // Clear to suppress random eye motion and let user code control it
 GLOBAL_VAR float     eyeTargetX          GLOBAL_INIT(0.0);  // Then set these continuously in user_loop.
 GLOBAL_VAR float     eyeTargetY          GLOBAL_INIT(0.0);  // Range is from -1.0 to +1.0.
+GLOBAL_VAR bool      ScaledEyeTarget    GLOBAL_INIT(false);
+
+// Added for mask synch over I2C
+GLOBAL_VAR bool      TargetChanged       GLOBAL_INIT(true);   // Flag set true when move randomly sets a new eye target. 
 
 // Pin definition stuff will go here
 
@@ -238,3 +243,8 @@ extern float           map2screen(int in);
 // Functions in user.cpp
 extern void            user_setup(void);
 extern void            user_loop(void);
+
+// IFDEF THIS OUT During Cleanup
+extern void UpdateEyePosition(float eyeX, float eyeY);
+extern float GetScaledEyeTargetX();
+extern float GetScaledEyeTargetY();

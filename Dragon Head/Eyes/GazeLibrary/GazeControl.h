@@ -4,6 +4,8 @@
 #include <Wire.h>
 #include <Arduino.h>
 
+#define NODTOSTRF // Adafruit or someone has not implemented DTOSTRF for SAMD // MAKE SURE TO Set this before including GazeControl.h
+
 /*************** Gaze Control Library *************************/
 /* helper functions for controling a Monster M4sk over I2C */
 
@@ -13,12 +15,13 @@
 // NOTE: Arduino based platforms do not reliably support %f. specificly sscanf for floats is not implemented 
 // this is due to the severe memory limitations on some arduino compatable devices. (and if you have ever tried implementing an OS on a small device you know this in your soul)
 // to get around this we will send float values as strings, and convert them back and forth using dtostrf() and atof()
-static const char GazeControlMessageFormat[] = " F = %i X = %s Y = %s B = %i P = %i M = %i W = %i H = %i\n ";
+static const char GazeControlMessageFormat[] = " F = %i X = %s Y = %s S = %i B = %i P = %i M = %i W = %i H = %i\n ";
 
 /*
  * F: 1 or not 1  F = anything else by 1 the message will not be parsed Is a Face detected, 1 if this is a valid message or not Or any other valid eye input 
  * X: Float, Intended x position of eye center, This value is to be scaled to be a range between -1 and 1 See the M4_eyes code for further details
  * Y: Float, Intended y position of eye center, This value is to be scaled to be a range between -1 and 1 See the M4_eyes code for further details
+ * S: 1 or not 1 if 1 X and Y are scaled (eyeTargetX and Y) if anything other than 1 X and Y are raw (eyeNewX eyeNewY)
  * B: integer, boolean 1 or not 1 B=1 will Blink. If a Blink = 1 is sent and no Blink = 0 closed eyes will time out after a bit
  * P: Integer, Desired Pupil Diameter (over-rides light sensor
  * M: Integer, -1,0,1 "Crosseye" set this to 1 to have the eyes go "crosseye" send -1 to have eyes look opposite 0 or anything else for normal
@@ -32,6 +35,7 @@ static const char GazeControlMessageFormat[] = " F = %i X = %s Y = %s B = %i P =
   int IS; // != 1 face not found or data tx/rx muck up co=ords are invalid
   float X; // X co-ord of face
   float Y; // Y co-ord of face
+  int S; // if 1 are X and Y "scaled"
   int B; // BLINK Boolean, 0 if not blink 1 if blink
   int P; // Pupil diameter
   int M; // "Mirror eyes" 1 for crosseye -1 for walleye 0 for normal
@@ -51,6 +55,10 @@ void GazeToI2C_Client ( GazeControlStruct* Gaze, TwoWire* Bus, int ID ); // call
 
 void CoreI2CWriteGaze( GazeControlStruct* Gaze, TwoWire* Bus );      // Core Write function
 void CoreI2CReadGaze(GazeControlStruct* Gaze, TwoWire* Bus);          // Core Read function
+
+#ifdef NODTOSTRF
+char *dtostrf (double val, signed char width, unsigned char prec, char *sout);
+#endif
 
 #ifdef FACETRACKING
 typedef struct

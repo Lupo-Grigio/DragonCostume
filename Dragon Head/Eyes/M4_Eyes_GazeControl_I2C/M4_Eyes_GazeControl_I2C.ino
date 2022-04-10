@@ -522,6 +522,7 @@ void loop() {
             eyeMoveStartTime = t;               // Save time of event
             eyeX = eyeOldX = eyeNewX;           // Save position
             eyeY = eyeOldY = eyeNewY;
+
           } else { // Move time's not yet fully elapsed -- interpolate position
             float e  = (float)dt / float(eyeMoveDuration); // 0.0 to 1.0 during move
             e = 3 * e * e - 2 * e * e * e; // Easing function: 3*e^2-2*e^3 0.0 to 1.0
@@ -557,13 +558,23 @@ void loop() {
             eyeNewY += mapRadius;
             eyeMoveStartTime = t;    // Save initial time of move
             eyeInMotion      = true; // Start move on next frame
+            TargetChanged = true;               // flag read by the i2c code to let it know a new val is ready to be read
+
           }
         }
       } else {
         // Allow user code to control eye position (e.g. IR sensor, joystick, etc.)
-        float r = ((float)mapDiameter - (float)DISPLAY_SIZE * M_PI_2) * 0.9;
-        eyeX = mapRadius + eyeTargetX * r;
-        eyeY = mapRadius + eyeTargetY * r;
+        if(ScaledEyeTarget)
+        {
+            eyeX = GetScaledEyeTargetX();
+            eyeY = GetScaledEyeTargetY();
+        }
+        else
+        {
+          float r = ((float)mapDiameter - (float)DISPLAY_SIZE * M_PI_2) * 0.9;
+          eyeX = mapRadius + eyeTargetX * r;
+          eyeY = mapRadius + eyeTargetY * r;
+        }      
       }
 
       // Eyes fixate (are slightly crossed) -- amount is filtered for boops

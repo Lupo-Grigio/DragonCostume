@@ -1,10 +1,6 @@
 /********************************* Gaze Library Functions *************************/
 
 #include "GazeControl.h"
-#ifndef dtostrf
-char *dtostrf (double val, signed char width, unsigned char prec, char *sout);
-#define NODTOSTRF
-#endif
 
 /* 
  * ParceIncomingString
@@ -31,6 +27,7 @@ void ParceIncomingString( String* str, GazeControlStruct* Gaze  )
                       &Gaze->IS,
                       X,
                       Y,
+                      &Gaze->S,
                       &Gaze->B,
                       &Gaze->P,
                       &Gaze->M,
@@ -50,6 +47,7 @@ void ParceIncomingString( String* str, GazeControlStruct* Gaze  )
                       Gaze->IS,
                       X,
                       Y,
+                      Gaze->S,
                       Gaze->B,
                       Gaze->P,
                       Gaze->M,
@@ -82,6 +80,7 @@ void BuildMessageString( String* str, GazeControlStruct* Gaze )
                       Gaze->IS,
                       X,
                       Y,
+                      Gaze->S,
                       Gaze->B,
                       Gaze->P,
                       Gaze->M,

@@ -520,6 +520,7 @@ void loop() {
         eyeX = eyeOldX;
         eyeY = eyeOldY;
         if(dt > eyeMoveDuration) {            // Time up?  Begin new move.
+          TargetChanged = true;
           // r is the radius in X and Y that the eye can go, from (0,0) in the center.
           float r = (float)mapDiameter - (float)DISPLAY_SIZE * M_PI_2; // radius of motion
           r *= 0.6;  // calibration constant
@@ -529,17 +530,30 @@ void loop() {
             float h = sqrt(r * r - x * x);
             eyeNewY = random(-h, h);
           } else {
-            eyeNewX = eyeTargetX * r;
-            eyeNewY = eyeTargetY * r;
+            if(newEyeXYExternal)
+            {
+              // eyeNewX,Y are set by a user call and _raw_ e.g. communicated from another m4sk
+              
+            }
+            else // eyeNewX,Y are set the old scaled way
+            {
+              eyeNewX = eyeTargetX * r;
+              eyeNewY = eyeTargetY * r;
+              eyeNewX += mapRadius;
+              eyeNewY += mapRadius;
+            }
           }
     
-          eyeNewX += mapRadius;
-          eyeNewY += mapRadius;
+
 
           // Set the duration for this move, and start it going.
           eyeMoveDuration  = random(83000, 166000); // ~1/12 - ~1/6 sec
           eyeMoveStartTime = t;               // Save initial time of move
           eyeInMotion      = true;            // Start move on next frame
+        }
+        else
+        {
+          TargetChanged = false;
         }
       }
 
