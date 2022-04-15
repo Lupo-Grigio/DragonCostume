@@ -30,7 +30,7 @@ If the micraphone has Headder pins installed facing the opposite direction from 
 ## Assembly
 NO GLUE NEEDED Snaps together 
 ### First assemble the two halves of the "cochlea"
-![Insert Micraphone into part with the hole ](../Assembly%20Step%201.png) 
+![Insert Micraphone into part with the hole ](./Assembly%20Step%201.png) 
 
 
 -   Orient the micraphone into one of the two halves of the cochlea
