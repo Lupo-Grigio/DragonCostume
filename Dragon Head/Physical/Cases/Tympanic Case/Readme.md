@@ -24,28 +24,32 @@ This case is designed for a mike with headders, or wires directly soldered to th
 If the micraphone has Headder pins installed facing the opposite direction from the micraphone the case will work Just Fine
 
 
-![Ready to assemble Tympanic Case ](./20220415_084631.jpg) for assembly instructions.
+![Ready to assemble Tympanic Case ](./20220415_084202.jpg) 
 
 
 ## Assembly
 NO GLUE NEEDED Snaps together 
 ### First assemble the two halves of the "cochlea"
-![Insert Micraphone into part with the hole ](./Assembly Step 1.png) 
+![Insert Micraphone into part with the hole ](../Assembly%20Step%201.png) 
+
+
 -   Orient the micraphone into one of the two halves of the cochlea
 -   The big round cavity is where the wire end goes
 -   feed wires from the board through the hole, this will help you orient the micraphone
-![slide the other half over the micraphone using pegs](./Assembly Step 2.png) 
+
+
+![slide the other half over the micraphone using pegs](./Assembly%20Step%202.png) 
 ### Attach the other half of the cochlea
 -   There are 2 Pegs, a short one and a long one
 -   They go in the 2 halves of the "cochlea" 
 -   The pegs should friction fit the two havles together
 
 ### Slide the 3rd cochlea piec over the micraphone
-![slide endcap over the micraphone and 2 halves of the cochlea](./Assembly Step 3.png) 
+![slide endcap over the micraphone and 2 halves of the cochlea](./Assembly%20Step%203.png) 
 - This part has two little dimples that slide into slots and hold the 2 halves of the cochlea together
 
 ### Optional Horn
-![Insert Micraphone into part with the hole ](./Adding the Horn.png) 
+![Insert Micraphone into part with the hole ](./Adding%20the%20Horn.png) 
 
 - The Horn is totally optional but fun
 - The base of the horn has 2 pegs that fit into slots right around the micraphone
