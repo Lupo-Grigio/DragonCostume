@@ -1,0 +1,11 @@
+.LeftSide, .RightSide {
+    height:100%;
+    width:100%;
+}
+
+.LeftSide {
+    background: red;
+}
+.RightSide {
+    background: purple;
+}
